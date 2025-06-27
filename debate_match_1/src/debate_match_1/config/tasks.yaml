@@ -1,0 +1,11 @@
+judge_speech:
+  description: "使用damage_calculator工具评判辞手发言造成的伤害"
+  expected_output: "伤害评判结果，包含具体的伤害数值和评判理由"
+
+player_a_speech:
+  description: "作为正方进行辩论发言"
+  expected_output: "一段有力的正方辩论发言"
+
+player_b_speech:
+  description: "作为反方进行辩论发言"
+  expected_output: "一段有力的反方辩论发言"

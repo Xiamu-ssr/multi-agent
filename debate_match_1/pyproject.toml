@@ -1,0 +1,24 @@
+[project]
+name = "debate_match_1"
+version = "0.1.0"
+description = "debate_match_1 using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.134.0,<1.0.0",
+    "deprecated>=1.2.0,<2.0.0"
+]
+
+[project.scripts]
+debate_match_1 = "debate_match_1.main:run"
+run_crew = "debate_match_1.main:run"
+train = "debate_match_1.main:train"
+replay = "debate_match_1.main:replay"
+test = "debate_match_1.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
