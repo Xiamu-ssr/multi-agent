@@ -75,6 +75,7 @@ class DebateCrew:
         )
 
     def run_debate(self, topic: str):
+        self._print_agent_info() 
         """运行辩论流程"""
         print(f"=== 辩论开始：{topic} ===")
         print(f"正方(A)血量: {self.hp_A}, 反方(B)血量: {self.hp_B}")
@@ -84,7 +85,7 @@ class DebateCrew:
             
             # 正方发言
             speech_a = self._get_speech(self.player_a(), topic, "正方", self.hp_A, self.hp_B)
-            print(f"正方发言: {speech_a}")
+            # print(f"正方发言: {speech_a}")
             
             # 裁判评判正方发言
             summary_a = self._judge_speech(topic, speech_a)
@@ -95,7 +96,7 @@ class DebateCrew:
             
             # 反方发言
             speech_b = self._get_speech(self.player_b(), topic, "反方", self.hp_B, self.hp_A)
-            print(f"反方发言: {speech_b}")
+            # print(f"反方发言: {speech_b}")
             
             # 裁判评判反方发言
             summary_b = self._judge_speech(topic, speech_b)
@@ -119,7 +120,7 @@ class DebateCrew:
     def _get_speech(self, agent: Agent, topic: str, side: str, own_hp: int, opponent_hp: int) -> str:
         """获取辞手发言"""
         task = Task(
-            description=f"作为{side}，针对辩题'{topic}'进行发言。当前血量：{own_hp}，对方血量：{opponent_hp}。请提出有力的论据。",
+            description=f"作为{side}，针对辩题'{topic}'进行发言。请提出有力的论据。",
             expected_output=f"一段有力的{side}辩论发言",
             agent=agent
         )
@@ -210,3 +211,29 @@ class DebateCrew:
         """裁判评判摘要"""
         damage: int
         rationale: str
+
+    # --- 在 DebateCrew 类里加一段辅助方法 ---
+    def _print_agent_info(self):
+        print("\n=== 运行时 Agent 信息 ===")
+        for ag in [self.player_a(), self.player_b(), self.judge()]:
+            # role / name 通常在 config 里。若没写 name，就用 role 当标题
+            label = getattr(ag, "name", None) or getattr(ag, "role", "未知Agent")
+            print(f"\n")
+
+            # ① 角色/目标
+            print("  - role: ", ag.role)
+            print("  - goal: ", ag.goal)
+
+            # ② LLM 基本信息
+            if ag.llm:
+                llm = ag.llm
+                print("  - LLM model : ", getattr(llm, "model", "未指定"))
+                print("  - temperature: ", getattr(llm, "temperature", "默认"))
+                # provider 字段在新版本 LiteLLM 才有，做个保护
+                print("  - provider   : ", getattr(llm, "provider", "未知"))
+            else:
+                print("  - LLM: 继承 Crew 默认配置（或读取 .env）")
+
+            # ③ 已挂载工具（可选）
+            if ag.tools:
+                print("  - tools:", [t.name for t in ag.tools])

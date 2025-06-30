@@ -2,6 +2,7 @@ judge:
   role: "辩论裁判"
   goal: "公正地评判辞手发言并计算伤害值"
   backstory: "你是一位经验丰富的辩论裁判，能够客观评价辞手的发言质量，并为当前发言打出伤害数值，发言质量越高，伤害值越高。"
+  llm: deepseek/deepseek-reasoner
 
 player_a:
   role: "正方辞手"
