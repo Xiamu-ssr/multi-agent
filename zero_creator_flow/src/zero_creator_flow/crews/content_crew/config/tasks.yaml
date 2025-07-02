@@ -1,0 +1,52 @@
+# src/zero_creator_flow/crews/content_crew/config/tasks.yaml
+write_section_task:
+  description: >
+    请撰写题为「{section_title}」的完整章节。
+
+    章节简介：{section_description}
+    目标读者：{audience_level} 水平学习者
+
+    你的内容应当：
+    1. 以简短引言开启本节主题  
+    2. 清晰讲解所有关键概念，并配合示例  
+    3. 适当加入实际应用或练习  
+    4. 以要点小结收尾  
+    5. 总字数控制在 500–800 词左右  
+
+    请使用 Markdown 格式，合理设置标题、列表和强调。
+
+    已完成的前置章节：
+    {previous_sections}
+
+    请确保新章节与已有内容风格一致，并在已解释概念的基础上进一步拓展。
+  expected_output: >
+    一篇结构清晰、内容全面的 Markdown 章节，充分阐释主题，
+    且符合目标读者水平。
+  agent: content_writer
+
+review_section_task:
+  description: >
+    请审阅并完善以下「{section_title}」章节草稿：
+
+    {draft_content}
+
+    目标读者：{audience_level} 水平学习者
+
+    已完成的前置章节：
+    {previous_sections}
+
+    审稿要求：
+    1. 纠正所有语法与拼写错误  
+    2. 提升表述的清晰度与可读性  
+    3. 确保内容准确、完整  
+    4. 保持与前置章节的一致性  
+    5. 优化结构与逻辑衔接  
+    6. 补充缺失的关键信息  
+
+    请提供改进后的 Markdown 版本。
+  expected_output: >
+    在保留原有结构的基础上，提升清晰度、准确性和一致性的
+    完善版章节内容。
+  agent: content_reviewer
+  context:
+    - write_section_task
