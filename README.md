@@ -13,6 +13,16 @@
 使用serper工具搜索
 基于deepseek-reasoner模型
 
+## Zero-Creator-Flow
+flow + crew
+主题报告撰写
+一位大纲定制者 + 章节内容定制者 + 内容校验者
+
+## Zero-Collaboration
+collaboration协作模式
+基于deepseek-reasoner模型
+agent会自动分配任务/请求帮助
+
 ## One
 入门自定义项目
 

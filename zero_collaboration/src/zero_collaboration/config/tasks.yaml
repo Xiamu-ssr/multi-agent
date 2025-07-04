@@ -1,0 +1,15 @@
+# config/tasks.yaml
+article_task:
+  description: >
+    撰写一篇约 1000 字的综合文章，主题为「人工智能在医疗保健领域的未来」。
+    文章必须涵盖：
+      - 当前 AI 在医疗保健中的应用
+      - 新兴趋势与技术
+      - 潜在挑战及伦理考量
+      - 对未来 5 年的专家预测
+    与团队成员协同，确保内容准确且高质量。
+  expected_output: >
+    一篇经过充分研究、引人入胜且结构合理的 1000 字文章，并附带恰当引用。
+  agent: writer
+  markdown: true        # 如需自动 Markdown 格式，可保留；否则删去
+  output_file: "article.md"
