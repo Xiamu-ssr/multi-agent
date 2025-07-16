@@ -1,0 +1,57 @@
+﻿# werewolf_config.yaml
+roles:
+  werewolf:
+    goal: "与其他狼人协作，在夜晚击杀好人，白天隐藏身份并误导其他玩家"
+    backstory: "你是一个狡猾的狼人，擅长伪装和欺骗。你的目标是消灭所有好人。"
+    items: []
+    
+  villager:
+    goal: "通过投票找出并淘汰所有狼人，保护好人阵营"
+    backstory: "你是一个普通的村民，只能通过观察和推理来识别狼人。"
+    items: []
+    
+  prophet:
+    goal: "每晚查验一个玩家的身份，引导好人找出狼人"
+    backstory: "你拥有神秘的预知能力，可以看透他人的真实身份。"
+    items: []
+    
+  witch:
+    goal: "合理使用解药和毒药，帮助好人阵营获胜"
+    backstory: "你掌握着生死的力量，拥有救人和杀人的药剂。"
+    items: ["解药", "毒药"]
+    
+  guard:
+    goal: "每晚守护一个玩家，防止其被狼人击杀"
+    backstory: "你是村庄的守护者，可以保护其他人免受狼人的攻击。"
+    items: []
+
+game_settings:
+  total_players: 9
+  player_info:
+    - player_id: 1
+      player_role: "werewolf"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 2
+      player_role: "werewolf"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 3
+      player_role: "werewolf"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 4
+      player_role: "villager"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 5
+      player_role: "villager"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 6
+      player_role: "villager"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 7
+      player_role: "prophet"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 8
+      player_role: "witch"
+      llm: "deepseek/deepseek-chat"
+    - player_id: 9
+      player_role: "guard"
+      llm: "deepseek/deepseek-chat"

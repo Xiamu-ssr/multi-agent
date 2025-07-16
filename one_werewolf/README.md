@@ -1,56 +1,43 @@
-# {{crew_name}} Crew
+# 狼人杀
 
-Welcome to the {{crew_name}} Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+## 角色
 
-## Installation
+| 角色 | 人数 | 技能 | 一次性物品 |
+| --- | --- | --- | --- |
+| 狼人 | 3 | 每晚可以击杀一个玩家 | 无 |
+| 村民 | 3 | 每晚可以投票表决 | 无 |
+| 预言家 | 1 | 每晚可以查验一个玩家的身份 | 无 |
+| 女巫 | 1 | 每晚可以救活一个玩家或毒死一个玩家 | 解药、毒药 |
+| 守卫 | 1 | 每晚可以守护一个玩家，防止被狼人击杀 | 无 |
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+总人数： 9人
 
-First, if you haven't already, install uv:
 
-```bash
-pip install uv
-```
+## 阵营
+| 阵营 | 角色 | 获胜条件 |
+| --- | --- | --- |
+| 狼人阵营 | 狼人 | 在场好人人数小于狼人人数 |
+| 好人阵营 | 村民、预言家、女巫、守卫 | 所有狼人被击杀或者被票死 |
 
-Next, navigate to your project directory and install the dependencies:
+## 游戏流程
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
+1. **初始化**
+   - 从配置文件(yaml)中加载角色为agent
+   - 启用memory功能
 
-### Customizing
+2. **夜晚阶段**
+   - **狼人投票**：将存活的狼人放入一个crew，开启crew memory，使用协作模式，输出投票结果
+   - **预言家**：直接单次调用接口，获得查验结果
+   - **女巫**：直接单次调用接口，获得是否使用药物的结果
+   - **守卫**：直接单次调用接口，获得守护目标的结果
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+3. **白天阶段**
+   - **宣布夜晚结果**：根据夜晚发生的变更，修改游戏全局状态，宣布结果，并判定游戏是否结束
+   - **依次发言**：将所有存活玩家放入同一个crew，开启crew memory
+   - **投票**：按个单次调用接口，收集所有人的投票
+   - **宣布结果**：根据投票结果宣布，并修改相关变量
+   - **判断对局**：判断游戏是否结束
 
-- Modify `src/one_werewolf/config/agents.yaml` to define your agents
-- Modify `src/one_werewolf/config/tasks.yaml` to define your tasks
-- Modify `src/one_werewolf/crew.py` to add your own logic, tools and specific args
-- Modify `src/one_werewolf/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your flow and begin execution, run this from the root folder of your project:
-
-```bash
-crewai run
-```
-
-This command initializes the one_werewolf Flow as defined in your configuration.
-
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
-
-## Understanding Your Crew
-
-The one_werewolf Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
-
-## Support
-
-For support, questions, or feedback regarding the {{crew_name}} Crew or crewAI.
-
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+4. **游戏结束条件**
+   - 狼人阵营胜利：存活的好人数量小于狼人数量
+   - 好人阵营胜利：所有狼人被淘汰
