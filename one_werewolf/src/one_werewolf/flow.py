@@ -4,72 +4,40 @@ from typing import Dict, Any, List, Optional
 import random
 from game_state import GameState, Role, PlayerStatus, GamePhase, Item, NightAction, Team
 import logging
+from game_room import GameRoom
 
 logger = logging.getLogger(__name__)
 
 
 class WerewolfGameFlow(Flow[GameState]):
+    game_room: GameRoom
     
     @start()
     def initialize_game(self) -> Dict[str, Any]:
-        """
-        游戏初始化 - 不调用agent，直接设置全局变量
-        """
-        # 初始化玩家身份
-        roles = [Role.WEREWOLF] * 3 + [Role.PROPHET, Role.WITCH, Role.GUARD] + [Role.VILLAGER] * 3
-        agent_ids = [f"agent_{i}" for i in range(len(roles))]
-        random.shuffle(roles)
-        
-        player_roles = dict(zip(agent_ids, roles))
-        
-        # 设置游戏状态
-        self.state = GameState(player_roles=player_roles)
-        self.state.current_phase = GamePhase.NIGHT
-        self.state.day_count = 1
+        self.game_room = GameRoom()
+        self.game_room.init_room()
         
         # 打印初始化信息
         print("=== 狼人杀游戏开始 ===")
-        print(f"玩家身份分配: {self.state.player_roles}")
-        print(f"第{self.state.day_count}夜开始")
-        
-        return {"phase": "werewolf_night_action"}
+        print(f"玩家身份分配: {[player.agent.role for player in self.game_room.game_state.players]}")
+        print(f"第{self.game_room.game_state.day_count}夜开始")
     
     @listen(initialize_game)
     def werewolf_night_action(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         夜晚-狼人投票杀人逻辑
         """
-        # TODO: 导入模块创建
-        # from tasks.night_tasks import create_werewolf_kill_task
-        # from agents.werewolf_agent import create_werewolf_agents
+        # 游戏还未结束
+        if self.game_room.check_game_end():
+            return {"phase": "game_over"}
         
-        # 获取存活的狼人
-        alive_werewolves = self.state.alive_werewolves
-        if not alive_werewolves:
-            return {"phase": "prophet_night_action"}
-        
-        # TODO: 创建狼人Crew实现
-        # werewolf_agents = create_werewolf_agents(alive_werewolves, allow_delegation=True)
-        # werewolf_task = create_werewolf_kill_task(self.state.alive_players, alive_werewolves)
-        #
-        # werewolf_crew = Crew(
-        #     agents=werewolf_agents,
-        #     tasks=[werewolf_task],
-        #     process=Process.hierarchical,
-        #     manager_agent=werewolf_agents[0],  # 第一个狼人作为管理者
-        #     memory=True,
-        #     verbose=True
-        # )
-        #
-        # result = werewolf_crew.kickoff()
-        
-        # 模拟结果
-        result = {"target": "agent_4"}  # 模拟狼人选择击杀的目标
+        # 狼人投票
+        result = self.game_room.werewolf_vote()
         
         # 解析结果并更新状态
         target = self._extract_target_from_result(result)
-        self.state.night_action.werewolf_target = target
-        print(f"狼人选择击杀: {self.state.night_action.werewolf_target}")
+        self.game_room.game_state.night_action.werewolf_target = target
+        print(f"狼人选择击杀: {self.game_room.game_state.night_action.werewolf_target}")
         
         return {"phase": "prophet_night_action"}
     
